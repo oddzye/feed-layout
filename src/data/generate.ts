@@ -60,7 +60,7 @@ function pickAspectRatio(rand: () => number): number {
 const VIDEO_SRCS = [
   "https://media.w3.org/2010/05/sintel/trailer.mp4",
   "https://media.w3.org/2010/05/sintel/trailer_hd.mp4",
-  "https://media.w3.org/2010/05/bunny/movie.mp4",
+  "http://media.w3.org/wai/evaluation-intros/conformance-evaluation.mp4",
   "https://media.w3.org/2010/05/bunny/trailer.mp4",
   "https://media.w3.org/2010/05/video/movie_300.mp4",
 ] as const satisfies readonly string[];
