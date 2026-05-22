@@ -1,7 +1,6 @@
-import { useRef, useState, useLayoutEffect, useMemo } from "react";
 import { generateDataset } from "@/data/generate";
-import { computeLayout } from "@/lib/layout";
-import type { FeedLayout, LayoutItem, LayoutRow } from "@/lib/layout";
+import { useLayout } from "@/hooks/useLayout";
+import type { LayoutItem, LayoutRow } from "@/lib/layout";
 
 const DATASET = generateDataset(2000);
 const TARGET_ROW_HEIGHT = 220;
@@ -20,7 +19,7 @@ function MediaTile({ layoutItem }: { layoutItem: LayoutItem }) {
     backgroundColor: "#1a1a1a",
   };
 
-  const imgStyle: React.CSSProperties = {
+  const mediaStyle: React.CSSProperties = {
     display: "block",
     width: "100%",
     height: "100%",
@@ -30,17 +29,12 @@ function MediaTile({ layoutItem }: { layoutItem: LayoutItem }) {
   if (mediaItem.type === "video") {
     return (
       <div style={tileStyle}>
-        {/*
-          preload="none" — browser loads nothing until the user clicks play.
-          Without this, 200+ video elements would each request metadata on mount.
-          poster shows the picsum thumbnail while the video is idle.
-        */}
         <video
           src={mediaItem.src}
           poster={mediaItem.thumbnailSrc}
           controls
           preload="none"
-          style={{ ...imgStyle, objectFit: "cover" }}
+          style={mediaStyle}
         />
       </div>
     );
@@ -52,7 +46,7 @@ function MediaTile({ layoutItem }: { layoutItem: LayoutItem }) {
         src={mediaItem.src}
         alt={mediaItem.alt}
         loading="lazy"
-        style={imgStyle}
+        style={mediaStyle}
       />
     </div>
   );
@@ -77,23 +71,7 @@ function FeedRow({ row }: { row: LayoutRow }) {
 }
 
 function App() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [containerWidth, setContainerWidth] = useState(0);
-
-  useLayoutEffect(() => {
-    if (containerRef.current) {
-      setContainerWidth(containerRef.current.offsetWidth);
-    }
-  }, []);
-
-  const layout = useMemo((): FeedLayout | null => {
-    if (containerWidth === 0) return null;
-    return computeLayout(DATASET, {
-      containerWidth,
-      targetRowHeight: TARGET_ROW_HEIGHT,
-      gap: GAP,
-    });
-  }, [containerWidth]);
+  const { layout, containerRef } = useLayout(DATASET, TARGET_ROW_HEIGHT, GAP);
 
   return (
     <div style={{ padding: GAP }}>
