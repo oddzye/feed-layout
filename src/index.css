@@ -1,0 +1,33 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Feed layout tunables — adjusted by density control later */
+  --feed-gap: 4px;
+  --feed-target-row-height: 220px;
+  --feed-padding: 8px;
+  --feed-bg: #0f0f0f;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--feed-bg);
+  color: #e5e5e5;
+  font-family: system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  height: 100%;
+}
