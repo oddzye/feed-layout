@@ -5,7 +5,7 @@ import type { MediaItem } from "@/types/media";
 
 export function useLayout(
   items: readonly MediaItem[],
-  targetRowHeight: number,
+  targetColumns: number,
   gap: number,
 ): {
   layout: FeedLayout | null;
@@ -34,7 +34,6 @@ export function useLayout(
       if (rafId !== undefined) cancelAnimationFrame(rafId);
       rafId = requestAnimationFrame(() => {
         rafId = undefined;
-        // entries is always non-empty when ResizeObserver fires; take the latest
         const entry = entries[entries.length - 1];
         if (entry) {
           const width = entry.contentRect.width;
@@ -49,12 +48,25 @@ export function useLayout(
       if (rafId !== undefined) cancelAnimationFrame(rafId);
       observer.disconnect();
     };
-  }, []); // containerRef and setContainerWidth are both stable after mount
+  }, []);
+
+  // Average aspect ratio of the dataset — used to convert targetColumns → targetRowHeight.
+  // A justified row at targetRowHeight with targetColumns average-ratio items fills exactly
+  // containerWidth: targetRowHeight = (containerWidth − (n−1)×gap) / (n × avgAspectRatio)
+  const avgAspectRatio = useMemo(
+    () =>
+      items.length === 0
+        ? 1
+        : items.reduce((sum, item) => sum + item.aspectRatio, 0) / items.length,
+    [items],
+  );
 
   const layout = useMemo((): FeedLayout | null => {
-    if (containerWidth <= 0) return null;
+    if (containerWidth <= 0 || targetColumns <= 0) return null;
+    const targetRowHeight =
+      (containerWidth - (targetColumns - 1) * gap) / (targetColumns * avgAspectRatio);
     return computeLayout(items, { containerWidth, targetRowHeight, gap });
-  }, [items, containerWidth, targetRowHeight, gap]);
+  }, [items, containerWidth, targetColumns, gap, avgAspectRatio]);
 
   return { layout, containerRef };
 }
