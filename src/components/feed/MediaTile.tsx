@@ -1,4 +1,6 @@
 import type { LayoutItem } from '@/lib/layout';
+import { ImageTile } from './ImageTile';
+import { VideoTile } from './VideoTile';
 
 interface Props {
   layoutItem: LayoutItem;
@@ -7,45 +9,24 @@ interface Props {
 export function MediaTile({ layoutItem }: Props) {
   const { mediaItem, left, width, height } = layoutItem;
 
-  const tileStyle: React.CSSProperties = {
-    position: 'absolute',
-    left,
-    top: 0,
-    width,
-    height,
-    overflow: 'hidden',
-    backgroundColor: '#1a1a1a',
-  };
-
-  const mediaStyle: React.CSSProperties = {
-    display: 'block',
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-  };
-
-  if (mediaItem.type === 'video') {
-    return (
-      <div style={tileStyle}>
-        <video
-          src={mediaItem.src}
-          poster={mediaItem.thumbnailSrc}
-          controls
-          preload="none"
-          style={mediaStyle}
-        />
-      </div>
-    );
-  }
-
   return (
-    <div style={tileStyle}>
-      <img
-        src={mediaItem.src}
-        alt={mediaItem.alt}
-        loading="lazy"
-        style={mediaStyle}
-      />
+    <div
+      style={{
+        position: 'absolute',
+        left,
+        top: 0,
+        width,
+        height,
+        overflow: 'hidden',
+        // Dark base shows through as skeleton while image/poster loads
+        backgroundColor: '#1a1a1a',
+      }}
+    >
+      {mediaItem.type === 'image' ? (
+        <ImageTile mediaItem={mediaItem} displayWidth={width} displayHeight={height} />
+      ) : (
+        <VideoTile mediaItem={mediaItem} />
+      )}
     </div>
   );
 }

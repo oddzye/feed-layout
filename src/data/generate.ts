@@ -56,13 +56,15 @@ function pickAspectRatio(rand: () => number): number {
   return selected * jitter;
 }
 
-// W3C-hosted public domain test videos — confirmed accessible (HTTP 200)
+// Short looping clips — all confirmed 200, all under 5MB for fast re-buffering
+// after virtualization unmounts and remounts the tile.
 const VIDEO_SRCS = [
-  "https://media.w3.org/2010/05/sintel/trailer.mp4",
-  "https://media.w3.org/2010/05/sintel/trailer_hd.mp4",
-  "http://media.w3.org/wai/evaluation-intros/conformance-evaluation.mp4",
-  "https://media.w3.org/2010/05/bunny/trailer.mp4",
-  "https://media.w3.org/2010/05/video/movie_300.mp4",
+  "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/friday.mp4",   // 515KB
+  "https://www.w3schools.com/html/mov_bbb.mp4",                                  // 788KB
+  "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",   // 1.1MB
+  "https://res.cloudinary.com/demo/video/upload/cat.mp4",                        // 3.5MB
+  "https://media.w3.org/2010/05/sintel/trailer.mp4",                             // 4.3MB
+  "https://media.w3.org/2010/05/video/movie_300.mp4",                            // 2.7MB
 ] as const satisfies readonly string[];
 
 function pickVideoSrc(index: number): string {
