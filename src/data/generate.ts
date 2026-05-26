@@ -77,7 +77,7 @@ function picsumUrl(seed: string, w: number, h: number): string {
 
 function generateItem(index: number, rand: () => number): MediaItem {
   const rawRatio = pickAspectRatio(rand);
-  const isVideo = rand() < 0.1;
+  const isVideo = rand() < 0.3;
 
   // Canonical source dimensions at 800px wide.
   // aspectRatio is re-derived from the rounded integers — the layout algorithm
