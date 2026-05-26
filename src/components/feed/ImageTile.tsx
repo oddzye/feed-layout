@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { ImageItem } from '@/types/media';
+import { BrokenMediaIcon } from './BrokenMediaIcon';
 
 interface Props {
   mediaItem: ImageItem;
@@ -35,6 +36,7 @@ export function ImageTile({ mediaItem, displayWidth, displayHeight }: Props) {
   const cachedSrc = srcCache.get(mediaItem.id);
   const [src, setSrc] = useState<string | undefined>(cachedSrc);
   const [loaded, setLoaded] = useState(cachedSrc !== undefined);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     // Skip IO setup if we already have a src (restored from cache or just set).
@@ -64,22 +66,28 @@ export function ImageTile({ mediaItem, displayWidth, displayHeight }: Props) {
   };
 
   return (
-    <div ref={containerRef} style={{ width: '100%', height: '100%' }}>
+    <div
+      ref={containerRef}
+      className={!loaded && !error ? 'tile-skeleton' : undefined}
+      style={{ position: 'relative', width: '100%', height: '100%' }}
+    >
       {src !== undefined && (
         <img
           src={src}
           alt={mediaItem.alt}
           onLoad={handleLoad}
+          onError={() => setError(true)}
+          className="tile-fade"
           style={{
             display: 'block',
             width: '100%',
             height: '100%',
             objectFit: 'cover',
             opacity: loaded ? 1 : 0,
-            transition: 'opacity 0.25s ease',
           }}
         />
       )}
+      {error && <BrokenMediaIcon />}
     </div>
   );
 }

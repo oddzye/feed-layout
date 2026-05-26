@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { VideoItem } from '@/types/media';
+import { BrokenMediaIcon } from './BrokenMediaIcon';
 
 interface Props {
   mediaItem: VideoItem;
@@ -12,6 +13,7 @@ export function VideoTile({ mediaItem }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [loaded, setLoaded] = useState(thumbnailLoaded.has(mediaItem.id));
   const [videoStarted, setVideoStarted] = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -20,7 +22,7 @@ export function VideoTile({ mediaItem }: Props) {
     const observer = new IntersectionObserver(
       ([entry]) => {
         const video = videoRef.current;
-        if (!video) return;
+        if (!video || error) return;
         if (entry?.isIntersecting) {
           video.play().catch(() => {});
         } else {
@@ -32,10 +34,14 @@ export function VideoTile({ mediaItem }: Props) {
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, []);
+  }, [error]);
 
   return (
-    <div ref={containerRef} style={{ position: 'relative', width: '100%', height: '100%' }}>
+    <div
+      ref={containerRef}
+      className={!loaded && !videoStarted && !error ? 'tile-skeleton' : undefined}
+      style={{ position: 'relative', width: '100%', height: '100%' }}
+    >
       <video
         ref={videoRef}
         src={mediaItem.src}
@@ -44,6 +50,7 @@ export function VideoTile({ mediaItem }: Props) {
         loop
         playsInline
         onPlaying={() => setVideoStarted(true)}
+        onError={() => setError(true)}
         style={{
           display: 'block',
           width: '100%',
@@ -59,6 +66,7 @@ export function VideoTile({ mediaItem }: Props) {
           thumbnailLoaded.add(mediaItem.id);
           setLoaded(true);
         }}
+        className="tile-fade"
         style={{
           position: 'absolute',
           inset: 0,
@@ -66,10 +74,10 @@ export function VideoTile({ mediaItem }: Props) {
           height: '100%',
           objectFit: 'cover',
           opacity: loaded && !videoStarted ? 1 : 0,
-          transition: 'opacity 0.25s ease',
           pointerEvents: 'none',
         }}
       />
+      {error && <BrokenMediaIcon />}
     </div>
   );
 }
