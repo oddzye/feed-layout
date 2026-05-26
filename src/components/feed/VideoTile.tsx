@@ -39,8 +39,7 @@ export function VideoTile({ mediaItem }: Props) {
   return (
     <div
       ref={containerRef}
-      className={!loaded && !videoStarted && !error ? 'tile-skeleton' : undefined}
-      style={{ position: 'relative', width: '100%', height: '100%' }}
+      className={`video-tile${!loaded && !videoStarted && !error ? ' tile-skeleton' : ''}`}
     >
       <video
         ref={videoRef}
@@ -51,14 +50,8 @@ export function VideoTile({ mediaItem }: Props) {
         playsInline
         onPlaying={() => setVideoStarted(true)}
         onError={() => setError(true)}
-        style={{
-          display: 'block',
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-        }}
+        className="video-tile-video"
       />
-      {/* Thumbnail overlaid on video, fades out once video starts playing */}
       <img
         src={mediaItem.thumbnailSrc}
         alt=""
@@ -66,16 +59,8 @@ export function VideoTile({ mediaItem }: Props) {
           thumbnailLoaded.add(mediaItem.id);
           setLoaded(true);
         }}
-        className="tile-fade"
-        style={{
-          position: 'absolute',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          opacity: loaded && !videoStarted ? 1 : 0,
-          pointerEvents: 'none',
-        }}
+        className="video-tile-thumbnail tile-fade"
+        style={{ opacity: loaded && !videoStarted ? 1 : 0 }}
       />
       {error && <BrokenMediaIcon />}
     </div>

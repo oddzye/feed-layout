@@ -26,9 +26,6 @@ export function ImageTile({ mediaItem, displayWidth, displayHeight }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const dimsRef = useRef({ width: displayWidth, height: displayHeight });
 
-  // Keep dimsRef current without mutating it during render (linter violation).
-  // useLayoutEffect with no deps runs after every render, synchronously before
-  // paint — well before any IntersectionObserver callback can fire.
   useLayoutEffect(() => {
     dimsRef.current = { width: displayWidth, height: displayHeight };
   });
@@ -39,7 +36,6 @@ export function ImageTile({ mediaItem, displayWidth, displayHeight }: Props) {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    // Skip IO setup if we already have a src (restored from cache or just set).
     if (src !== undefined) return;
 
     const el = containerRef.current;
@@ -68,8 +64,7 @@ export function ImageTile({ mediaItem, displayWidth, displayHeight }: Props) {
   return (
     <div
       ref={containerRef}
-      className={!loaded && !error ? 'tile-skeleton' : undefined}
-      style={{ position: 'relative', width: '100%', height: '100%' }}
+      className={`image-tile${!loaded && !error ? ' tile-skeleton' : ''}`}
     >
       {src !== undefined && (
         <img
@@ -77,14 +72,8 @@ export function ImageTile({ mediaItem, displayWidth, displayHeight }: Props) {
           alt={mediaItem.alt}
           onLoad={handleLoad}
           onError={() => setError(true)}
-          className="tile-fade"
-          style={{
-            display: 'block',
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            opacity: loaded ? 1 : 0,
-          }}
+          className="image-tile-img tile-fade"
+          style={{ opacity: loaded ? 1 : 0 }}
         />
       )}
       {error && <BrokenMediaIcon />}

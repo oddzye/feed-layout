@@ -10,18 +10,7 @@ export function MediaTile({ layoutItem }: Props) {
   const { mediaItem, left, width, height } = layoutItem;
 
   return (
-    <div
-      style={{
-        position: 'absolute',
-        left,
-        top: 0,
-        width,
-        height,
-        overflow: 'hidden',
-        // Dark base shows through as skeleton while image/poster loads
-        backgroundColor: '#1a1a1a',
-      }}
-    >
+    <div className="media-tile" style={{ left, width, height }}>
       {mediaItem.type === 'image' ? (
         <ImageTile mediaItem={mediaItem} displayWidth={width} displayHeight={height} />
       ) : (
