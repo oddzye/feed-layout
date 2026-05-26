@@ -38,7 +38,7 @@ The dataset itself is ~30% videos and ~70% images, with aspect ratios spread acr
 
 ---
 
-## A few decisions worth calling out
+## A few decisions
 
 **No virtualization library.** `react-window` and other libs expect a flat list of uniform-height items. Our layout is rows of variable height, computed after the fact, so the library API doesn't fit, and the custom implementation ended up being about 80 lines anyway.
 
@@ -58,7 +58,7 @@ The dataset itself is ~30% videos and ~70% images, with aspect ratios spread acr
 
 ---
 
-## Known rough edges
+## Known issues
 
 - **Videos re-buffer on scroll-back.** The browser's video buffer is tied to the element, not the URL. When virtualization destroys the element, the buffer is gone. Scrolling back to a video that was already playing means waiting for it to buffer again. With short clips it's quick, but it could be noticeable with the larger test files.
 
