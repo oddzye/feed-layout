@@ -20,6 +20,7 @@ function App() {
           step={1}
           value={targetColumns}
           onChange={(e) => setTargetColumns(Number(e.target.value))}
+          aria-label="Feed density"
           className="density-slider"
         />
         <span className="density-label">Spacious</span>

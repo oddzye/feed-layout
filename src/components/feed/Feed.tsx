@@ -20,7 +20,7 @@ export function Feed({ items, targetColumns, gap }: Props) {
   const visibleRows = rows.slice(range.startIndex, range.endIndex + 1);
 
   return (
-    <div ref={viewportRef} className="feed-viewport">
+    <div ref={viewportRef} className="feed-viewport" role="feed" aria-label="Media feed">
       <div
         ref={containerRef}
         className="feed-canvas"

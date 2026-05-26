@@ -40,6 +40,8 @@ export function VideoTile({ mediaItem }: Props) {
     <div
       ref={containerRef}
       className={`video-tile${!loaded && !videoStarted && !error ? ' tile-skeleton' : ''}`}
+      role="img"
+      aria-label="Video preview"
     >
       <video
         ref={videoRef}
