@@ -48,6 +48,18 @@ The dataset itself is ~30% videos and ~70% images, with aspect ratios spread acr
 
 ---
 
+## Stretch goals
+
+A few extras beyond the core requirements:
+
+**Fast-scroll grace (implemented).** When you fling the feed, the virtual window doesn't thrash — range updates are suppressed while scroll velocity is above ~20 px/ms and committed 150 ms after it drops. This keeps the browser focused on painting scroll frames rather than diffing the DOM.
+
+**Module-level caches (implemented).** Image URLs and thumbnail-loaded state live outside React so tiles that get unmounted and remounted via virtualization come back instantly — no re-fetch, no re-shimmer.
+
+**Layout stability on resize (implemented).** The scroll position is anchored to the first visible row's leading item when the layout recomputes — the content you're looking at stays in place.
+
+---
+
 ## What was left out
 
 **Keyboard navigation and accessibility.** No focus management, no ARIA roles on the feed. Would need real work before this is usable without a mouse.
