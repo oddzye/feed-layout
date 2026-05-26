@@ -37,6 +37,7 @@ body {
 .feed-viewport {
   height: 100dvh;
   overflow: auto;
+  padding-top: 60px;
 }
 
 .feed-canvas {
@@ -56,6 +57,7 @@ body {
   top: 0;
   overflow: hidden;
   background-color: #1a1a1a;
+  border-radius: 6px;
 }
 
 .image-tile {
