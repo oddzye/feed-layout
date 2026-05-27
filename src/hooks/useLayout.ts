@@ -61,10 +61,15 @@ export function useLayout(
     [items],
   );
 
+  // Fixed reference width keeps targetRowHeight constant regardless of viewport size.
+  // On a narrow window fewer items fit per row at the same absolute height, so the
+  // layout restructures on resize rather than just scaling everything down.
+  const REFERENCE_WIDTH = 1200;
+
   const layout = useMemo((): FeedLayout | null => {
     if (containerWidth <= 0 || targetColumns <= 0) return null;
     const targetRowHeight =
-      (containerWidth - (targetColumns - 1) * gap) / (targetColumns * avgAspectRatio);
+      (REFERENCE_WIDTH - (targetColumns - 1) * gap) / (targetColumns * avgAspectRatio);
     return computeLayout(items, { containerWidth, targetRowHeight, gap });
   }, [items, containerWidth, targetColumns, gap, avgAspectRatio]);
 
